@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tournée 5S – Impasse 87</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3347;
+    --accent: #f7c948;
+    --accent2: #ff6b4a;
+    --text: #eef0f8;
+    --muted: #7a7f9a;
+    --green: #4ade80;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --radius: 14px;
+    --safe-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 18px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .logo-badge {
+    background: var(--accent);
+    color: #000;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 8px; border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  header h1 { font-size: 15px; font-weight: 600; color: var(--text); }
+  header p { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .count-badge {
+    background: var(--accent2);
+    color: white;
+    font-size: 12px; font-weight: 700;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    transition: transform .2s;
+  }
+
+  /* ── SCREENS ─────────────────────────────────────── */
+  .screen { display: none; padding: 16px; padding-bottom: calc(80px + var(--safe-bottom)); }
+  .screen.active { display: block; }
+
+  /* ── BOTTOM NAV ───────────────────────────────────── */
+  nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding-bottom: var(--safe-bottom);
+    z-index: 100;
+  }
+  nav button {
+    flex: 1; background: none; border: none;
+    color: var(--muted);
+    padding: 12px 8px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 500;
+    cursor: pointer; transition: color .2s;
+  }
+  nav button.active { color: var(--accent); }
+  nav button svg { width: 22px; height: 22px; }
+  nav button span { font-size: 10px; }
+
+  /* ── CARDS ───────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* ── FORM ELEMENTS ───────────────────────────────── */
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  input[type=text], input[type=date], textarea, select {
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    padding: 11px 14px; outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  textarea { resize: none; min-height: 80px; }
+  select option { background: var(--surface2); }
+
+  .field { margin-bottom: 14px; }
+
+  /* ── BUTTONS ─────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: none; border-radius: 12px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    padding: 13px 20px; width: 100%;
+    transition: opacity .15s, transform .1s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn:active { transform: scale(0.97); opacity: .85; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-danger { background: var(--accent2); color: white; }
+  .btn-ghost {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-green { background: var(--green); color: #000; }
+  .btn-sm { padding: 8px 14px; font-size: 12px; width: auto; border-radius: 8px; }
+
+  /* ── PHOTO GRID ───────────────────────────────────── */
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .photo-thumb {
+    aspect-ratio: 1; border-radius: 10px;
+    overflow: hidden; background: var(--surface2);
+    position: relative; border: 1px solid var(--border);
+  }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-thumb .del-photo {
+    position: absolute; top: 4px; right: 4px;
+    background: rgba(0,0,0,.6); color: white;
+    border: none; border-radius: 50%;
+    width: 22px; height: 22px;
+    font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .photo-add-btn {
+    aspect-ratio: 1; border-radius: 10px;
+    background: var(--surface2); border: 2px dashed var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; cursor: pointer; color: var(--muted); font-size: 11px;
+    transition: border-color .2s, color .2s;
+  }
+  .photo-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .photo-add-btn svg { width: 28px; height: 28px; }
+
+  /* ── PROBLEM LIST ─────────────────────────────────── */
+  .problem-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .problem-item.resolved { opacity: .55; }
+  .prob-icon {
+    width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .prob-icon.critique { background: rgba(248,113,113,.15); }
+  .prob-icon.majeur { background: rgba(247,201,72,.12); }
+  .prob-icon.mineur { background: rgba(96,165,250,.12); }
+  .prob-body { flex: 1; min-width: 0; }
+  .prob-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
+  .prob-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+  .prob-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .badge-critique { background: rgba(248,113,113,.2); color: var(--red); }
+  .badge-majeur { background: rgba(247,201,72,.15); color: var(--accent); }
+  .badge-mineur { background: rgba(96,165,250,.15); color: var(--blue); }
+  .prob-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .prob-photos-count { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── PRIORITY TAG ─────────────────────────────────── */
+  .priority-chips { display: flex; gap: 8px; margin-bottom: 14px; }
+  .priority-chip {
+    flex: 1; padding: 10px 6px; border-radius: 10px;
+    border: 2px solid var(--border); background: var(--surface2);
+    text-align: center; font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all .2s; color: var(--muted);
+  }
+  .priority-chip.selected-critique { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+  .priority-chip.selected-majeur { border-color: var(--accent); background: rgba(247,201,72,.1); color: var(--accent); }
+  .priority-chip.selected-mineur { border-color: var(--blue); background: rgba(96,165,250,.1); color: var(--blue); }
+
+  /* ── ZONE SELECTOR ───────────────────────────────── */
+  .zone-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+  .zone-chips::-webkit-scrollbar { display: none; }
+  .zone-chip {
+    white-space: nowrap; padding: 8px 14px;
+    border-radius: 20px; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--muted);
+    font-size: 12px; cursor: pointer; transition: all .2s; flex-shrink: 0;
+  }
+  .zone-chip.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+
+  /* ── EMAIL PREVIEW ───────────────────────────────── */
+  .email-preview {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+    font-size: 13px; line-height: 1.7; color: var(--text);
+    white-space: pre-wrap; font-family: 'DM Sans', sans-serif;
+  }
+  .email-header-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .email-label { font-size: 11px; color: var(--muted); min-width: 50px; }
+
+  /* ── STAT CARDS ──────────────────────────────────── */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 10px;
+    text-align: center;
+  }
+  .stat-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; }
+  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+  .stat-num.red { color: var(--red); }
+  .stat-num.yellow { color: var(--accent); }
+  .stat-num.blue { color: var(--blue); }
+
+  /* ── EMPTY STATE ────────────────────────────────── */
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-state svg { width: 48px; height: 48px; opacity: .3; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ── TOAST ───────────────────────────────────────── */
+  #toast {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 30px; padding: 10px 20px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transition: all .3s; pointer-events: none;
+    white-space: nowrap; z-index: 999;
+    box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── MODAL ───────────────────────────────────────── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.7); z-index: 200;
+    align-items: flex-end; justify-content: center;
+    padding: 0;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid var(--border);
+    width: 100%; max-height: 92dvh;
+    overflow-y: auto; padding: 20px 18px;
+    padding-bottom: calc(24px + var(--safe-bottom));
+    animation: slideUp .3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle {
+    width: 36px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 0 auto 16px;
+  }
+  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
+
+  /* ── DIVIDER ─────────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── COPY BUTTON ─────────────────────────────────── */
+  .copy-row { display: flex; gap: 8px; margin-top: 12px; }
+
+  /* Photo input hidden */
+  #photoInput { display: none; }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="logo-badge">5S</div>
+    <div>
+      <h1>Tournée Terrain</h1>
+      <p id="headerDate"></p>
+    </div>
+  </div>
+  <div class="count-badge" id="totalCount">0</div>
+</header>
+
+<!-- ═══════════════ SCREEN : ACCUEIL ═══════════════ -->
+<div class="screen active" id="screen-accueil">
+  <div class="section-title">Résumé de tournée</div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num red" id="stat-critique">0</div>
+      <div class="stat-lbl">Critique</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num yellow" id="stat-majeur">0</div>
+      <div class="stat-lbl">Majeur</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num blue" id="stat-mineur">0</div>
+      <div class="stat-lbl">Mineur</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Infos tournée</div>
+    <div class="field">
+      <label>Nom de l'agent</label>
+      <input type="text" id="agentName" placeholder="Votre nom" oninput="saveConfig()">
+    </div>
+    <div class="field">
+      <label>Date de la tournée</label>
+      <input type="date" id="tourDate" oninput="saveConfig()">
+    </div>
+    <div class="field">
+      <label>Zone / Bâtiment</label>
+      <input type="text" id="tourZone" placeholder="ex : Impasse 87" oninput="saveConfig()">
+    </div>
+    <div class="field">
+      <label>Destinataire du mail</label>
+      <input type="text" id="mailTo" placeholder="ex : Pierre-Yves" oninput="saveConfig()">
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="goTo('screen-ajouter')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Signaler un problème
+  </button>
+</div>
+
+<!-- ═══════════════ SCREEN : AJOUTER ═══════════════ -->
+<div class="screen" id="screen-ajouter">
+  <div class="section-title">Nouveau signalement</div>
+
+  <div class="card">
+    <!-- Priorité -->
+    <label>Niveau de priorité</label>
+    <div class="priority-chips">
+      <div class="priority-chip" id="chip-critique" onclick="selectPriority('critique')">🔴 Critique</div>
+      <div class="priority-chip" id="chip-majeur" onclick="selectPriority('majeur')">🟡 Majeur</div>
+      <div class="priority-chip" id="chip-mineur" onclick="selectPriority('mineur')">🔵 Mineur</div>
+    </div>
+
+    <!-- Zone rapide -->
+    <label>Zone</label>
+    <div class="zone-chips" id="zoneChips">
+      <div class="zone-chip active" onclick="selectZone(this,'Zone commune')">Zone commune</div>
+      <div class="zone-chip" onclick="selectZone(this,'Passerelle')">Passerelle</div>
+      <div class="zone-chip" onclick="selectZone(this,'Toiture')">Toiture</div>
+      <div class="zone-chip" onclick="selectZone(this,'Fosse')">Fosse</div>
+      <div class="zone-chip" onclick="selectZone(this,'Entrepôt')">Entrepôt</div>
+      <div class="zone-chip" onclick="selectZone(this,'Bureaux')">Bureaux</div>
+      <div class="zone-chip" onclick="selectZone(this,'Sanitaires')">Sanitaires</div>
+    </div>
+
+    <!-- Catégorie 5S -->
+    <div class="field">
+      <label>Catégorie 5S</label>
+      <select id="categorie5S">
+        <option value="Seiri – Tri">Seiri – Tri (éliminer le superflu)</option>
+        <option value="Seiton – Rangement">Seiton – Rangement</option>
+        <option value="Seiso – Nettoyage">Seiso – Nettoyage</option>
+        <option value="Seiketsu – Standardisation">Seiketsu – Standardisation</option>
+        <option value="Shitsuke – Discipline">Shitsuke – Discipline / Suivi</option>
+        <option value="Sécurité">Sécurité</option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="field">
+      <label>Description du problème</label>
+      <textarea id="probDesc" placeholder="Décrivez le problème observé…"></textarea>
+    </div>
+
+    <!-- Action requise -->
+    <div class="field">
+      <label>Action requise</label>
+      <input type="text" id="probAction" placeholder="ex : Remplacer, Nettoyer, Signaler…">
+    </div>
+
+    <!-- Photos -->
+    <label>Photos</label>
+    <div class="photo-grid" id="photoGrid">
+      <div class="photo-add-btn" onclick="document.getElementById('photoInput').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>
+        Photo
+      </div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" capture="environment" multiple onchange="handlePhotos(this)">
+  </div>
+
+  <button class="btn btn-primary" onclick="addProblem()" style="margin-bottom:10px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    Enregistrer le signalement
+  </button>
+  <button class="btn btn-ghost" onclick="goTo('screen-liste')">Voir la liste</button>
+</div>
+
+<!-- ═══════════════ SCREEN : LISTE ═══════════════ -->
+<div class="screen" id="screen-liste">
+  <div class="section-title">Problèmes signalés</div>
+  <div id="problemList">
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <p>Aucun problème signalé</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN : MAIL ═══════════════ -->
+<div class="screen" id="screen-mail">
+  <div class="section-title">Rapport de tournée</div>
+
+  <div class="card">
+    <div class="email-header-row">
+      <span class="email-label">À :</span>
+      <input type="text" id="mailToFinal" placeholder="Destinataire" style="padding:6px 10px;font-size:13px">
+    </div>
+    <div class="email-header-row">
+      <span class="email-label">Cc :</span>
+      <input type="text" id="mailCc" placeholder="Gildas Blanchard (optionnel)" style="padding:6px 10px;font-size:13px">
+    </div>
+    <div class="email-header-row">
+      <span class="email-label">Objet :</span>
+      <input type="text" id="mailSubject" style="padding:6px 10px;font-size:13px">
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="generateEmail()" style="margin-bottom:12px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    Générer le mail
+  </button>
+
+  <div id="emailOutput" style="display:none">
+    <div class="section-title" style="margin-top:4px">Aperçu du mail</div>
+    <div class="email-preview" id="emailText"></div>
+    <div class="copy-row">
+      <button class="btn btn-green" onclick="copyEmail()" style="flex:1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copier le texte
+      </button>
+      <button class="btn btn-ghost" onclick="openMailApp()" style="flex:1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Ouvrir Mail
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav>
+  <button class="active" onclick="goTo('screen-accueil')" id="nav-accueil">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Accueil</span>
+  </button>
+  <button onclick="goTo('screen-ajouter')" id="nav-ajouter">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Signaler</span>
+  </button>
+  <button onclick="goTo('screen-liste')" id="nav-liste">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
+    <span>Liste</span>
+  </button>
+  <button onclick="goTo('screen-mail')" id="nav-mail">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    <span>Mail</span>
+  </button>
+</nav>
+
+<!-- MODAL DETAIL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">Détail du problème</div>
+    <div id="modalBody"></div>
+    <button class="btn btn-ghost" onclick="closeModal()" style="margin-top:12px">Fermer</button>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────
+let problems = JSON.parse(localStorage.getItem('5s-problems') || '[]');
+let config   = JSON.parse(localStorage.getItem('5s-config')   || '{}');
+let currentPhotos = [];
+let selectedPriority = 'majeur';
+let selectedZone     = 'Zone commune';
+
+// ─── INIT ─────────────────────────────────────────────────────────────
+window.onload = () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('headerDate').textContent = formatDate(today);
+  document.getElementById('tourDate').value = config.date || today;
+  document.getElementById('agentName').value = config.agent || '';
+  document.getElementById('tourZone').value  = config.zone  || 'Impasse 87';
+  document.getElementById('mailTo').value    = config.mailTo || '';
+  selectPriority('majeur');
+  refreshAll();
+};
+
+function saveConfig() {
+  config = {
+    agent:  document.getElementById('agentName').value,
+    date:   document.getElementById('tourDate').value,
+    zone:   document.getElementById('tourZone').value,
+    mailTo: document.getElementById('mailTo').value,
+  };
+  localStorage.setItem('5s-config', JSON.stringify(config));
+  document.getElementById('headerDate').textContent = formatDate(config.date);
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const navId = 'nav-' + id.replace('screen-','');
+  const navBtn = document.getElementById(navId);
+  if (navBtn) navBtn.classList.add('active');
+  if (id === 'screen-liste') renderList();
+  if (id === 'screen-mail')  prefillMail();
+}
+
+// ─── PRIORITY ─────────────────────────────────────────────────────────
+function selectPriority(p) {
+  selectedPriority = p;
+  ['critique','majeur','mineur'].forEach(x => {
+    document.getElementById('chip-'+x).className = 'priority-chip';
+  });
+  document.getElementById('chip-'+p).classList.add('selected-'+p);
+}
+
+// ─── ZONE ─────────────────────────────────────────────────────────────
+function selectZone(el, zone) {
+  selectedZone = zone;
+  document.querySelectorAll('.zone-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── PHOTOS ───────────────────────────────────────────────────────────
+function handlePhotos(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      currentPhotos.push(e.target.result);
+      renderPhotoGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('photoGrid');
+  grid.innerHTML = '';
+  currentPhotos.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'photo-thumb';
+    thumb.innerHTML = `<img src="${src}" alt="photo">
+      <button class="del-photo" onclick="removePhoto(${i})">×</button>`;
+    grid.appendChild(thumb);
+  });
+  // Add button
+  const addBtn = document.createElement('div');
+  addBtn.className = 'photo-add-btn';
+  addBtn.onclick = () => document.getElementById('photoInput').click();
+  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>Photo`;
+  grid.appendChild(addBtn);
+}
+
+function removePhoto(i) {
+  currentPhotos.splice(i, 1);
+  renderPhotoGrid();
+}
+
+// ─── ADD PROBLEM ──────────────────────────────────────────────────────
+function addProblem() {
+  const desc   = document.getElementById('probDesc').value.trim();
+  const action = document.getElementById('probAction').value.trim();
+  const cat    = document.getElementById('categorie5S').value;
+  if (!desc) { showToast('⚠️ Décrivez le problème'); return; }
+
+  const prob = {
+    id:       Date.now(),
+    priority: selectedPriority,
+    zone:     selectedZone,
+    category: cat,
+    desc,
+    action,
+    photos:   [...currentPhotos],
+    resolved: false,
+    date:     new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+  };
+  problems.unshift(prob);
+  save();
+  resetForm();
+  refreshAll();
+  showToast('✅ Signalement enregistré');
+  goTo('screen-liste');
+}
+
+function resetForm() {
+  document.getElementById('probDesc').value   = '';
+  document.getElementById('probAction').value = '';
+  document.getElementById('categorie5S').selectedIndex = 0;
+  currentPhotos = [];
+  renderPhotoGrid();
+  selectPriority('majeur');
+}
+
+// ─── LIST ─────────────────────────────────────────────────────────────
+function renderList() {
+  const container = document.getElementById('problemList');
+  if (!problems.length) {
+    container.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <p>Aucun problème signalé</p></div>`;
+    return;
+  }
+  container.innerHTML = problems.map((p, i) => {
+    const icon = p.priority === 'critique' ? '🔴' : p.priority === 'majeur' ? '🟡' : '🔵';
+    return `
+    <div class="problem-item ${p.resolved ? 'resolved' : ''}">
+      <div class="prob-icon ${p.priority}"><span>${icon}</span></div>
+      <div class="prob-body">
+        <div class="prob-title">${p.desc}</div>
+        <div class="prob-meta">
+          <span class="prob-badge badge-${p.priority}">${p.priority}</span>
+          <span>${p.zone}</span>
+          <span>${p.date}</span>
+        </div>
+        ${p.action ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">→ ${p.action}</div>` : ''}
+        ${p.photos.length ? `<div class="prob-photos-count">📷 ${p.photos.length} photo(s)</div>` : ''}
+        <div class="prob-actions">
+          <button class="btn btn-ghost btn-sm" onclick="viewDetail(${i})">Détail</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleResolved(${i})">${p.resolved ? '↩ Rouvrir' : '✓ Résolu'}</button>
+          <button class="btn btn-sm" style="background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.2)" onclick="deleteProblem(${i})">Suppr.</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleResolved(i) {
+  problems[i].resolved = !problems[i].resolved;
+  save(); renderList(); refreshAll();
+}
+
+function deleteProblem(i) {
+  problems.splice(i, 1);
+  save(); renderList(); refreshAll();
+  showToast('🗑 Signalement supprimé');
+}
+
+function viewDetail(i) {
+  const p = problems[i];
+  document.getElementById('modalTitle').textContent = p.desc;
+  document.getElementById('modalBody').innerHTML = `
+    <div style="margin-bottom:12px">
+      <span class="prob-badge badge-${p.priority}" style="font-size:12px">${p.priority.toUpperCase()}</span>
+      <span style="font-size:12px;color:var(--muted);margin-left:8px">${p.zone} · ${p.date}</span>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Catégorie : ${p.category}</div>
+    ${p.action ? `<div style="font-size:13px;margin-bottom:12px"><strong>Action requise :</strong> ${p.action}</div>` : ''}
+    ${p.photos.length ? `<div class="photo-grid">${p.photos.map(s => `<div class="photo-thumb"><img src="${s}"></div>`).join('')}</div>` : '<p style="font-size:13px;color:var(--muted)">Aucune photo</p>'}
+  `;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('open');
+}
+document.getElementById('detailModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('detailModal')) closeModal();
+});
+
+// ─── STATS ────────────────────────────────────────────────────────────
+function refreshAll() {
+  const total    = problems.filter(p => !p.resolved).length;
+  const critique = problems.filter(p => p.priority === 'critique' && !p.resolved).length;
+  const majeur   = problems.filter(p => p.priority === 'majeur'   && !p.resolved).length;
+  const mineur   = problems.filter(p => p.priority === 'mineur'   && !p.resolved).length;
+  document.getElementById('totalCount').textContent    = total;
+  document.getElementById('stat-critique').textContent = critique;
+  document.getElementById('stat-majeur').textContent   = majeur;
+  document.getElementById('stat-mineur').textContent   = mineur;
+}
+
+// ─── EMAIL ────────────────────────────────────────────────────────────
+function prefillMail() {
+  const to = config.mailTo || '';
+  document.getElementById('mailToFinal').value = to;
+  document.getElementById('mailCc').value = 'Gildas Blanchard';
+  const zone  = config.zone  || 'Impasse 87';
+  const dDate = formatDate(config.date || new Date().toISOString().split('T')[0]);
+  document.getElementById('mailSubject').value = `Compte-rendu tournée 5S – ${zone} – ${dDate}`;
+}
+
+function generateEmail() {
+  const agent   = config.agent || '[Votre nom]';
+  const zone    = config.zone  || 'Impasse 87';
+  const dDate   = formatDate(config.date || new Date().toISOString().split('T')[0]);
+  const to      = document.getElementById('mailToFinal').value || '[Destinataire]';
+
+  const open    = problems.filter(p => !p.resolved);
+  const closed  = problems.filter(p => p.resolved);
+
+  const prioSection = (label, key, emoji) => {
+    const items = open.filter(p => p.priority === key);
+    if (!items.length) return '';
+    return `\n${emoji} ${label.toUpperCase()} (${items.length})\n` +
+      items.map((p,i) => `  ${i+1}. [${p.zone}] ${p.desc}` +
+        (p.action ? `\n     → Action : ${p.action}` : '') +
+        (p.photos.length ? `\n     → Photos : ${p.photos.length} jointe(s)` : '')).join('\n');
+  };
+
+  const body = `Bonjour ${to},
+
+Dans le cadre du 5S de l'${zone}, qui m'a été confié par Gildas Blanchard, je vous adresse le compte-rendu de ma tournée terrain du ${dDate}.
+
+──────────────────────────────────
+RÉSUMÉ DE TOURNÉE
+──────────────────────────────────
+Agent : ${agent}
+Zone  : ${zone}
+Date  : ${dDate}
+Problèmes ouverts  : ${open.length}
+Problèmes résolus  : ${closed.length}
+
+──────────────────────────────────
+PROBLÈMES SIGNALÉS
+──────────────────────────────────
+${prioSection('Critique','critique','🔴') || ''}${prioSection('Majeur','majeur','🟡') || ''}${prioSection('Mineur','mineur','🔵') || ''}${open.length === 0 ? '  ✅ Aucun problème ouvert lors de cette tournée.' : ''}
+
+──────────────────────────────────
+ACTIONS ATTENDUES
+──────────────────────────────────
+Merci de bien vouloir prendre en compte les points signalés, en particulier les niveaux Critique et Majeur qui nécessitent une intervention prioritaire.
+
+Je reste disponible pour tout complément d'information ou pour accompagner la mise en place des actions correctives.
+
+Bien cordialement,
+${agent}
+Référent 5S – ${zone}`;
+
+  document.getElementById('emailText').textContent = body;
+  document.getElementById('emailOutput').style.display = 'block';
+  document.getElementById('emailOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyEmail() {
+  const text = document.getElementById('emailText').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Texte copié !')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('📋 Texte copié !');
+  });
+}
+
+function openMailApp() {
+  const subject = encodeURIComponent(document.getElementById('mailSubject').value);
+  const body    = encodeURIComponent(document.getElementById('emailText').textContent);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function save() {
+  localStorage.setItem('5s-problems', JSON.stringify(problems));
+}
+</script>
+</body>
+</html>
