@@ -3,828 +3,782 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Tournée 5S – Impasse 87</title>
-
-<!-- Icône pour iOS -->
+<title>Tournee 5S</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tournee 5S">
+<meta name="application-name" content="Tournee 5S">
 <link rel="apple-touch-icon" href="icon.png">
-
-<!-- Icône pour Android -->
-<link rel="icon" type="image/png" sizes="512x512" href="icon.png">
-
-<!-- Nom affiché sous l'icône -->
-<meta name="apple-mobile-web-app-title" content="Tournée 5S">
-<meta name="application-name" content="Tournée 5S">
-
+<link rel="icon" type="image/png" href="icon.png">
 <style>
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --border: #2e3347;
-    --accent: #f7c948;
-    --accent2: #ff6b4a;
-    --text: #eef0f8;
-    --muted: #7a7f9a;
-    --green: #4ade80;
-    --red: #f87171;
-    --blue: #60a5fa;
-    --radius: 14px;
-    --safe-bottom: env(safe-area-inset-bottom, 16px);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100dvh;
-    overflow-x: hidden;
-  }
-
-  /* ── HEADER ─────────────────────────────────────── */
-  header {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 18px 12px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .header-left { display: flex; align-items: center; gap: 10px; }
-  .logo-badge {
-    background: var(--accent);
-    color: #000;
-    font-family: 'Courier New', monospace;
-    font-size: 11px; font-weight: 700;
-    padding: 4px 8px; border-radius: 6px;
-    letter-spacing: 0.5px;
-  }
-  header h1 { font-size: 15px; font-weight: 600; color: var(--text); }
-  header p { font-size: 11px; color: var(--muted); margin-top: 1px; }
-  .count-badge {
-    background: var(--accent2);
-    color: white;
-    font-size: 12px; font-weight: 700;
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Courier New', monospace;
-    transition: transform .2s;
-  }
-
-  /* ── SCREENS ─────────────────────────────────────── */
-  .screen { display: none; padding: 16px; padding-bottom: calc(80px + var(--safe-bottom)); }
-  .screen.active { display: block; }
-
-  /* ── BOTTOM NAV ───────────────────────────────────── */
-  nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding-bottom: var(--safe-bottom);
-    z-index: 100;
-  }
-  nav button {
-    flex: 1; background: none; border: none;
-    color: var(--muted);
-    padding: 12px 8px 10px;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    font-size: 10px; font-weight: 500;
-    cursor: pointer; transition: color .2s;
-  }
-  nav button.active { color: var(--accent); }
-  nav button svg { width: 22px; height: 22px; }
-  nav button span { font-size: 10px; }
-
-  /* ── CARDS ───────────────────────────────────────── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-  .card-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .section-title {
-    font-family: 'Courier New', monospace;
-    font-size: 11px; color: var(--accent);
-    letter-spacing: 1px; text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  /* ── FORM ELEMENTS ───────────────────────────────── */
-  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-  input[type=text], input[type=date], textarea, select {
-    width: 100%; background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text);
-    font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    padding: 11px 14px; outline: none;
-    transition: border-color .2s;
-    -webkit-appearance: none;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
-  textarea { resize: none; min-height: 80px; }
-  select option { background: var(--surface2); }
-
-  .field { margin-bottom: 14px; }
-
-  /* ── BUTTONS ─────────────────────────────────────── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    border: none; border-radius: 12px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    padding: 13px 20px; width: 100%;
-    transition: opacity .15s, transform .1s;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
-  .btn:active { transform: scale(0.97); opacity: .85; }
-  .btn-primary { background: var(--accent); color: #000; }
-  .btn-danger { background: var(--accent2); color: white; }
-  .btn-ghost {
-    background: var(--surface2); color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-green { background: var(--green); color: #000; }
-  .btn-sm { padding: 8px 14px; font-size: 12px; width: auto; border-radius: 8px; }
-
-  /* ── PHOTO GRID ───────────────────────────────────── */
-  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-  .photo-thumb {
-    aspect-ratio: 1; border-radius: 10px;
-    overflow: hidden; background: var(--surface2);
-    position: relative; border: 1px solid var(--border);
-  }
-  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .photo-thumb .del-photo {
-    position: absolute; top: 4px; right: 4px;
-    background: rgba(0,0,0,.6); color: white;
-    border: none; border-radius: 50%;
-    width: 22px; height: 22px;
-    font-size: 14px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    line-height: 1;
-  }
-  .photo-add-btn {
-    aspect-ratio: 1; border-radius: 10px;
-    background: var(--surface2); border: 2px dashed var(--border);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 6px; cursor: pointer; color: var(--muted); font-size: 11px;
-    transition: border-color .2s, color .2s;
-  }
-  .photo-add-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .photo-add-btn svg { width: 28px; height: 28px; }
-
-  /* ── PROBLEM LIST ─────────────────────────────────── */
-  .problem-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-    display: flex; align-items: flex-start; gap: 12px;
-  }
-  .problem-item.resolved { opacity: .55; }
-  .prob-icon {
-    width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 18px;
-  }
-  .prob-icon.critique { background: rgba(248,113,113,.15); }
-  .prob-icon.majeur { background: rgba(247,201,72,.12); }
-  .prob-icon.mineur { background: rgba(96,165,250,.12); }
-  .prob-body { flex: 1; min-width: 0; }
-  .prob-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
-  .prob-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
-  .prob-badge {
-    display: inline-block; font-size: 10px; font-weight: 700;
-    padding: 2px 7px; border-radius: 20px;
-    text-transform: uppercase; letter-spacing: .5px;
-  }
-  .badge-critique { background: rgba(248,113,113,.2); color: var(--red); }
-  .badge-majeur { background: rgba(247,201,72,.15); color: var(--accent); }
-  .badge-mineur { background: rgba(96,165,250,.15); color: var(--blue); }
-  .prob-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-  .prob-photos-count { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-  /* ── PRIORITY TAG ─────────────────────────────────── */
-  .priority-chips { display: flex; gap: 8px; margin-bottom: 14px; }
-  .priority-chip {
-    flex: 1; padding: 10px 6px; border-radius: 10px;
-    border: 2px solid var(--border); background: var(--surface2);
-    text-align: center; font-size: 11px; font-weight: 700;
-    cursor: pointer; transition: all .2s; color: var(--muted);
-  }
-  .priority-chip.selected-critique { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
-  .priority-chip.selected-majeur { border-color: var(--accent); background: rgba(247,201,72,.1); color: var(--accent); }
-  .priority-chip.selected-mineur { border-color: var(--blue); background: rgba(96,165,250,.1); color: var(--blue); }
-
-  /* ── ZONE SELECTOR ───────────────────────────────── */
-  .zone-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
-  .zone-chips::-webkit-scrollbar { display: none; }
-  .zone-chip {
-    white-space: nowrap; padding: 8px 14px;
-    border-radius: 20px; background: var(--surface2);
-    border: 1px solid var(--border); color: var(--muted);
-    font-size: 12px; cursor: pointer; transition: all .2s; flex-shrink: 0;
-  }
-  .zone-chip.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
-
-  /* ── EMAIL PREVIEW ───────────────────────────────── */
-  .email-preview {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px;
-    font-size: 13px; line-height: 1.7; color: var(--text);
-    white-space: pre-wrap; font-family: 'DM Sans', sans-serif;
-  }
-  .email-header-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .email-label { font-size: 11px; color: var(--muted); min-width: 50px; }
-
-  /* ── STAT CARDS ──────────────────────────────────── */
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-  .stat-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 10px;
-    text-align: center;
-  }
-  .stat-num { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; }
-  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
-  .stat-num.red { color: var(--red); }
-  .stat-num.yellow { color: var(--accent); }
-  .stat-num.blue { color: var(--blue); }
-
-  /* ── EMPTY STATE ────────────────────────────────── */
-  .empty-state {
-    text-align: center; padding: 40px 20px;
-    color: var(--muted);
-  }
-  .empty-state svg { width: 48px; height: 48px; opacity: .3; margin-bottom: 12px; }
-  .empty-state p { font-size: 14px; }
-
-  /* ── TOAST ───────────────────────────────────────── */
-  #toast {
-    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px);
-    background: var(--surface2); color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 30px; padding: 10px 20px;
-    font-size: 13px; font-weight: 500;
-    opacity: 0; transition: all .3s; pointer-events: none;
-    white-space: nowrap; z-index: 999;
-    box-shadow: 0 4px 20px rgba(0,0,0,.4);
-  }
-  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* ── MODAL ───────────────────────────────────────── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,.7); z-index: 200;
-    align-items: flex-end; justify-content: center;
-    padding: 0;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: 20px 20px 0 0;
-    border-top: 1px solid var(--border);
-    width: 100%; max-height: 92dvh;
-    overflow-y: auto; padding: 20px 18px;
-    padding-bottom: calc(24px + var(--safe-bottom));
-    animation: slideUp .3s ease;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-handle {
-    width: 36px; height: 4px; background: var(--border);
-    border-radius: 2px; margin: 0 auto 16px;
-  }
-  .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
-
-  /* ── DIVIDER ─────────────────────────────────────── */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-  /* ── COPY BUTTON ─────────────────────────────────── */
-  .copy-row { display: flex; gap: 8px; margin-top: 12px; }
-
-  /* Photo input hidden */
-  #photoInput { display: none; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  background: #0f1117;
+  color: #eef0f8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: #0f1117;
+  border-bottom: 1px solid #2e3347;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  height: 56px;
+}
+.logo {
+  background: #f7c948;
+  color: #000;
+  font-weight: 800;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  margin-right: 10px;
+}
+.header-left { display: flex; align-items: center; }
+.header-info h1 { font-size: 15px; font-weight: 600; }
+.header-info p  { font-size: 11px; color: #7a7f9a; }
+.badge-count {
+  background: #ff6b4a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.screen { display: none; padding: 72px 14px 80px; }
+.screen.active { display: block; }
+#nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #1a1d27;
+  border-top: 1px solid #2e3347;
+  display: flex;
+  height: 60px;
+  z-index: 100;
+}
+#nav button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #7a7f9a;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+}
+#nav button.active { color: #f7c948; }
+#nav button svg { width: 22px; height: 22px; }
+.stitle {
+  font-size: 11px;
+  color: #f7c948;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.card {
+  background: #1a1d27;
+  border: 1px solid #2e3347;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.field { margin-bottom: 14px; }
+label {
+  display: block;
+  font-size: 12px;
+  color: #7a7f9a;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  background: #22263a;
+  border: 1px solid #2e3347;
+  border-radius: 10px;
+  color: #eef0f8;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  padding: 11px 13px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input:focus, textarea:focus, select:focus { border-color: #f7c948; }
+textarea { resize: none; height: 80px; }
+.stats-row { display: flex; gap: 8px; margin-bottom: 14px; }
+.stat-box {
+  flex: 1;
+  background: #1a1d27;
+  border: 1px solid #2e3347;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.stat-num { font-size: 26px; font-weight: 800; line-height: 1; }
+.stat-lbl { font-size: 10px; color: #7a7f9a; margin-top: 4px; text-transform: uppercase; }
+.red { color: #f87171; }
+.yel { color: #f7c948; }
+.blu { color: #60a5fa; }
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.btn:active { opacity: 0.75; }
+.btn-yellow { background: #f7c948; color: #000; }
+.btn-ghost  { background: #22263a; color: #eef0f8; border: 1px solid #2e3347; }
+.btn-green  { background: #4ade80; color: #000; }
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  border: none;
+  cursor: pointer;
+}
+.btn-sm:active { opacity: 0.75; }
+.pchips { display: flex; gap: 8px; margin-bottom: 14px; }
+.pchip {
+  flex: 1;
+  padding: 10px 4px;
+  border-radius: 10px;
+  border: 2px solid #2e3347;
+  background: #22263a;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #7a7f9a;
+}
+.pchip.sel-critique { border-color: #f87171; background: rgba(248,113,113,0.1); color: #f87171; }
+.pchip.sel-majeur   { border-color: #f7c948; background: rgba(247,201,72,0.1);  color: #f7c948; }
+.pchip.sel-mineur   { border-color: #60a5fa; background: rgba(96,165,250,0.1);  color: #60a5fa; }
+.zchips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.zchips::-webkit-scrollbar { display: none; }
+.zchip {
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #22263a;
+  border: 1px solid #2e3347;
+  color: #7a7f9a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.zchip.active { background: #f7c948; border-color: #f7c948; color: #000; }
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.photo-thumb {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #22263a;
+  position: relative;
+  border: 1px solid #2e3347;
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.del-ph {
+  position: absolute;
+  top: 4px; right: 4px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px; height: 24px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.add-photo-btn {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: #22263a;
+  border: 2px dashed #2e3347;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #7a7f9a;
+  font-size: 11px;
+}
+.add-photo-btn svg { width: 26px; height: 26px; }
+.prob-item {
+  background: #1a1d27;
+  border: 1px solid #2e3347;
+  border-radius: 12px;
+  padding: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+.prob-item.resolved { opacity: 0.45; }
+.prob-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.ic-critique { background: rgba(248,113,113,0.15); }
+.ic-majeur   { background: rgba(247,201,72,0.12); }
+.ic-mineur   { background: rgba(96,165,250,0.12); }
+.prob-body { flex: 1; min-width: 0; }
+.prob-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+.prob-meta { font-size: 11px; color: #7a7f9a; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; }
+.b-critique { background: rgba(248,113,113,0.2); color: #f87171; }
+.b-majeur   { background: rgba(247,201,72,0.15);  color: #f7c948; }
+.b-mineur   { background: rgba(96,165,250,0.15);  color: #60a5fa; }
+.prob-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.empty { text-align: center; padding: 50px 20px; color: #7a7f9a; }
+.empty svg { width: 48px; height: 48px; opacity: 0.3; margin-bottom: 12px; }
+.empty p { font-size: 14px; }
+#toast {
+  position: fixed;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: #22263a;
+  color: #eef0f8;
+  border: 1px solid #2e3347;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+  transition: opacity 0.3s, transform 0.3s;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  align-items: flex-end;
+}
+#modal-overlay.open { display: flex; }
+#modal-box {
+  background: #1a1d27;
+  border-top: 1px solid #2e3347;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px 16px 30px;
+}
+.modal-handle { width: 36px; height: 4px; background: #2e3347; border-radius: 2px; margin: 0 auto 16px; }
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+.email-box {
+  background: #22263a;
+  border: 1px solid #2e3347;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  color: #eef0f8;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+.email-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.email-lbl { font-size: 12px; color: #7a7f9a; min-width: 48px; font-weight: 600; }
+.copy-row { display: flex; gap: 8px; }
+.copy-row .btn { margin-bottom: 0; }
 </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- HEADER -->
-<header>
+<div id="header">
   <div class="header-left">
-    <div class="logo-badge">5S</div>
-    <div>
-      <h1>Tournée Terrain</h1>
-      <p id="headerDate"></p>
+    <span class="logo">5S</span>
+    <div class="header-info">
+      <h1>Tournee Terrain</h1>
+      <p id="hDate">--/--/----</p>
     </div>
   </div>
-  <div class="count-badge" id="totalCount">0</div>
-</header>
-
-<!-- ═══════════════ SCREEN : ACCUEIL ═══════════════ -->
-<div class="screen active" id="screen-accueil">
-  <div class="section-title">Résumé de tournée</div>
-
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-num red" id="stat-critique">0</div>
-      <div class="stat-lbl">Critique</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num yellow" id="stat-majeur">0</div>
-      <div class="stat-lbl">Majeur</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num blue" id="stat-mineur">0</div>
-      <div class="stat-lbl">Mineur</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-title">Infos tournée</div>
-    <div class="field">
-      <label>Nom de l'agent</label>
-      <input type="text" id="agentName" placeholder="Votre nom" oninput="saveConfig()">
-    </div>
-    <div class="field">
-      <label>Date de la tournée</label>
-      <input type="date" id="tourDate" oninput="saveConfig()">
-    </div>
-    <div class="field">
-      <label>Zone / Bâtiment</label>
-      <input type="text" id="tourZone" placeholder="ex : Impasse 87" oninput="saveConfig()">
-    </div>
-    <div class="field">
-      <label>Destinataire du mail</label>
-      <input type="text" id="mailTo" placeholder="ex : Pierre-Yves" oninput="saveConfig()">
-    </div>
-  </div>
-
-  <button class="btn btn-primary" onclick="goTo('screen-ajouter')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Signaler un problème
-  </button>
+  <div class="badge-count" id="badgeCount">0</div>
 </div>
 
-<!-- ═══════════════ SCREEN : AJOUTER ═══════════════ -->
-<div class="screen" id="screen-ajouter">
-  <div class="section-title">Nouveau signalement</div>
-
+<!-- ACCUEIL -->
+<div class="screen active" id="s-accueil">
+  <div class="stitle">Resume de tournee</div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num red" id="sc">0</div><div class="stat-lbl">Critique</div></div>
+    <div class="stat-box"><div class="stat-num yel" id="sm">0</div><div class="stat-lbl">Majeur</div></div>
+    <div class="stat-box"><div class="stat-num blu" id="smi">0</div><div class="stat-lbl">Mineur</div></div>
+  </div>
   <div class="card">
-    <!-- Priorité -->
-    <label>Niveau de priorité</label>
-    <div class="priority-chips">
-      <div class="priority-chip" id="chip-critique" onclick="selectPriority('critique')">🔴 Critique</div>
-      <div class="priority-chip" id="chip-majeur" onclick="selectPriority('majeur')">🟡 Majeur</div>
-      <div class="priority-chip" id="chip-mineur" onclick="selectPriority('mineur')">🔵 Mineur</div>
-    </div>
+    <div class="stitle">Infos tournee</div>
+    <div class="field"><label>Nom de l'agent</label><input type="text" id="cfgAgent" placeholder="Votre nom"></div>
+    <div class="field"><label>Date</label><input type="date" id="cfgDate"></div>
+    <div class="field"><label>Zone / Batiment</label><input type="text" id="cfgZone" placeholder="ex : Impasse 87"></div>
+    <div class="field"><label>Destinataire du mail</label><input type="text" id="cfgMailTo" placeholder="ex : Pierre-Yves"></div>
+    <button class="btn btn-ghost" onclick="saveConfig()">Enregistrer la configuration</button>
+  </div>
+  <button class="btn btn-yellow" onclick="goTo('s-ajouter')">+ Signaler un probleme</button>
+</div>
 
-    <!-- Zone rapide -->
-    <label>Zone</label>
-    <div class="zone-chips" id="zoneChips">
-      <div class="zone-chip active" onclick="selectZone(this,'Zone commune')">Zone commune</div>
-      <div class="zone-chip" onclick="selectZone(this,'Passerelle')">Passerelle</div>
-      <div class="zone-chip" onclick="selectZone(this,'Toiture')">Toiture</div>
-      <div class="zone-chip" onclick="selectZone(this,'Fosse')">Fosse</div>
-      <div class="zone-chip" onclick="selectZone(this,'Entrepôt')">Entrepôt</div>
-      <div class="zone-chip" onclick="selectZone(this,'Bureaux')">Bureaux</div>
-      <div class="zone-chip" onclick="selectZone(this,'Sanitaires')">Sanitaires</div>
-    </div>
-
-    <!-- Catégorie 5S -->
+<!-- AJOUTER -->
+<div class="screen" id="s-ajouter">
+  <div class="stitle">Nouveau signalement</div>
+  <div class="card">
     <div class="field">
-      <label>Catégorie 5S</label>
-      <select id="categorie5S">
-        <option value="Seiri – Tri">Seiri – Tri (éliminer le superflu)</option>
-        <option value="Seiton – Rangement">Seiton – Rangement</option>
-        <option value="Seiso – Nettoyage">Seiso – Nettoyage</option>
-        <option value="Seiketsu – Standardisation">Seiketsu – Standardisation</option>
-        <option value="Shitsuke – Discipline">Shitsuke – Discipline / Suivi</option>
-        <option value="Sécurité">Sécurité</option>
-      </select>
-    </div>
-
-    <!-- Description -->
-    <div class="field">
-      <label>Description du problème</label>
-      <textarea id="probDesc" placeholder="Décrivez le problème observé…"></textarea>
-    </div>
-
-    <!-- Action requise -->
-    <div class="field">
-      <label>Action requise</label>
-      <input type="text" id="probAction" placeholder="ex : Remplacer, Nettoyer, Signaler…">
-    </div>
-
-    <!-- Photos -->
-    <label>Photos</label>
-    <div class="photo-grid" id="photoGrid">
-      <div class="photo-add-btn" onclick="document.getElementById('photoInput').click()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>
-        Photo
+      <label>Priorite</label>
+      <div class="pchips">
+        <div class="pchip" id="pc-critique" onclick="selPrio('critique')">🔴 Critique</div>
+        <div class="pchip" id="pc-majeur"   onclick="selPrio('majeur')">🟡 Majeur</div>
+        <div class="pchip" id="pc-mineur"   onclick="selPrio('mineur')">🔵 Mineur</div>
       </div>
     </div>
-    <input type="file" id="photoInput" accept="image/*" capture="environment" multiple onchange="handlePhotos(this)">
-  </div>
-
-  <button class="btn btn-primary" onclick="addProblem()" style="margin-bottom:10px">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-    Enregistrer le signalement
-  </button>
-  <button class="btn btn-ghost" onclick="goTo('screen-liste')">Voir la liste</button>
-</div>
-
-<!-- ═══════════════ SCREEN : LISTE ═══════════════ -->
-<div class="screen" id="screen-liste">
-  <div class="section-title">Problèmes signalés</div>
-  <div id="problemList">
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      <p>Aucun problème signalé</p>
+    <div class="field">
+      <label>Zone</label>
+      <div class="zchips" id="zchips">
+        <div class="zchip active" onclick="selZone(this,'Zone commune')">Zone commune</div>
+        <div class="zchip" onclick="selZone(this,'Passerelle')">Passerelle</div>
+        <div class="zchip" onclick="selZone(this,'Toiture')">Toiture</div>
+        <div class="zchip" onclick="selZone(this,'Fosse')">Fosse</div>
+        <div class="zchip" onclick="selZone(this,'Entrepot')">Entrepot</div>
+        <div class="zchip" onclick="selZone(this,'Bureaux')">Bureaux</div>
+        <div class="zchip" onclick="selZone(this,'Sanitaires')">Sanitaires</div>
+      </div>
     </div>
+    <div class="field">
+      <label>Categorie 5S</label>
+      <select id="fCat">
+        <option value="Seiri - Tri">Seiri - Tri (eliminer le superflu)</option>
+        <option value="Seiton - Rangement">Seiton - Rangement</option>
+        <option value="Seiso - Nettoyage">Seiso - Nettoyage</option>
+        <option value="Seiketsu - Standardisation">Seiketsu - Standardisation</option>
+        <option value="Shitsuke - Discipline">Shitsuke - Discipline</option>
+        <option value="Securite">Securite</option>
+      </select>
+    </div>
+    <div class="field"><label>Description</label><textarea id="fDesc" placeholder="Decrivez le probleme observe..."></textarea></div>
+    <div class="field"><label>Action requise</label><input type="text" id="fAction" placeholder="ex : Remplacer, Nettoyer..."></div>
+    <div class="field">
+      <label>Photos</label>
+      <div class="photo-grid" id="photoGrid">
+        <div class="add-photo-btn" onclick="document.getElementById('photoInput').click()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>
+          Photo
+        </div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="addPhotos(this)">
+    </div>
+    <button class="btn btn-yellow" onclick="saveProblem()">Enregistrer le signalement</button>
+    <button class="btn btn-ghost" onclick="goTo('s-liste')">Voir la liste</button>
   </div>
 </div>
 
-<!-- ═══════════════ SCREEN : MAIL ═══════════════ -->
-<div class="screen" id="screen-mail">
-  <div class="section-title">Rapport de tournée</div>
+<!-- LISTE -->
+<div class="screen" id="s-liste">
+  <div class="stitle">Problemes signales</div>
+  <div id="probList"></div>
+</div>
 
+<!-- MAIL -->
+<div class="screen" id="s-mail">
+  <div class="stitle">Rapport de tournee</div>
   <div class="card">
-    <div class="email-header-row">
-      <span class="email-label">À :</span>
-      <input type="text" id="mailToFinal" placeholder="Destinataire" style="padding:6px 10px;font-size:13px">
-    </div>
-    <div class="email-header-row">
-      <span class="email-label">Cc :</span>
-      <input type="text" id="mailCc" placeholder="Gildas Blanchard (optionnel)" style="padding:6px 10px;font-size:13px">
-    </div>
-    <div class="email-header-row">
-      <span class="email-label">Objet :</span>
-      <input type="text" id="mailSubject" style="padding:6px 10px;font-size:13px">
-    </div>
+    <div class="email-row"><span class="email-lbl">A :</span><input type="text" id="mTo" placeholder="Destinataire" style="padding:8px 12px;font-size:13px"></div>
+    <div class="email-row"><span class="email-lbl">Cc :</span><input type="text" id="mCc" placeholder="Gildas Blanchard" style="padding:8px 12px;font-size:13px"></div>
+    <div class="email-row"><span class="email-lbl">Objet :</span><input type="text" id="mSub" style="padding:8px 12px;font-size:13px"></div>
   </div>
-
-  <button class="btn btn-primary" onclick="generateEmail()" style="margin-bottom:12px">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
-    Générer le mail
-  </button>
-
-  <div id="emailOutput" style="display:none">
-    <div class="section-title" style="margin-top:4px">Aperçu du mail</div>
-    <div class="email-preview" id="emailText"></div>
+  <button class="btn btn-yellow" onclick="genMail()">Generer le mail</button>
+  <div id="mailOutput" style="display:none">
+    <div class="stitle">Apercu du mail</div>
+    <div class="email-box" id="mailText"></div>
     <div class="copy-row">
-      <button class="btn btn-green" onclick="copyEmail()" style="flex:1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copier le texte
-      </button>
-      <button class="btn btn-ghost" onclick="openMailApp()" style="flex:1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
-        Ouvrir Mail
-      </button>
+      <button class="btn btn-green" onclick="copyMail()">Copier</button>
+      <button class="btn btn-ghost" onclick="openMail()">Ouvrir Mail</button>
     </div>
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
-<nav>
-  <button class="active" onclick="goTo('screen-accueil')" id="nav-accueil">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    <span>Accueil</span>
+<!-- NAV -->
+<div id="nav">
+  <button class="active" id="nb-accueil" onclick="goTo('s-accueil')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Accueil
   </button>
-  <button onclick="goTo('screen-ajouter')" id="nav-ajouter">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    <span>Signaler</span>
+  <button id="nb-ajouter" onclick="goTo('s-ajouter')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Signaler
   </button>
-  <button onclick="goTo('screen-liste')" id="nav-liste">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
-    <span>Liste</span>
+  <button id="nb-liste" onclick="goTo('s-liste')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
+    Liste
   </button>
-  <button onclick="goTo('screen-mail')" id="nav-mail">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
-    <span>Mail</span>
+  <button id="nb-mail" onclick="goTo('s-mail')">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    Mail
   </button>
-</nav>
+</div>
 
-<!-- MODAL DETAIL -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal">
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModal()">
+  <div id="modal-box" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modalTitle">Détail du problème</div>
-    <div id="modalBody"></div>
-    <button class="btn btn-ghost" onclick="closeModal()" style="margin-top:12px">Fermer</button>
+    <div class="modal-title" id="mTitle"></div>
+    <div id="mBody"></div>
+    <button class="btn btn-ghost" onclick="closeModal()" style="margin-top:14px">Fermer</button>
   </div>
 </div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────────────
-let problems = JSON.parse(localStorage.getItem('5s-problems') || '[]');
-let config   = JSON.parse(localStorage.getItem('5s-config')   || '{}');
-let currentPhotos = [];
-let selectedPriority = 'majeur';
-let selectedZone     = 'Zone commune';
+var problems = [];
+var cfg = {};
+var photos = [];
+var prio = 'majeur';
+var zone = 'Zone commune';
 
-// ─── INIT ─────────────────────────────────────────────────────────────
-window.onload = () => {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('headerDate').textContent = formatDate(today);
-  document.getElementById('tourDate').value = config.date || today;
-  document.getElementById('agentName').value = config.agent || '';
-  document.getElementById('tourZone').value  = config.zone  || 'Impasse 87';
-  document.getElementById('mailTo').value    = config.mailTo || '';
-  selectPriority('majeur');
-  refreshAll();
+try { problems = JSON.parse(localStorage.getItem('5s_probs') || '[]'); } catch(e) { problems = []; }
+try { cfg = JSON.parse(localStorage.getItem('5s_cfg') || '{}'); } catch(e) { cfg = {}; }
+
+window.onload = function() {
+  var today = new Date().toISOString().slice(0, 10);
+  document.getElementById('cfgDate').value   = cfg.date   || today;
+  document.getElementById('cfgAgent').value  = cfg.agent  || '';
+  document.getElementById('cfgZone').value   = cfg.zone   || 'Impasse 87';
+  document.getElementById('cfgMailTo').value = cfg.mailTo || '';
+  document.getElementById('hDate').textContent = fmtDate(cfg.date || today);
+  selPrio('majeur');
+  refreshStats();
 };
 
-function saveConfig() {
-  config = {
-    agent:  document.getElementById('agentName').value,
-    date:   document.getElementById('tourDate').value,
-    zone:   document.getElementById('tourZone').value,
-    mailTo: document.getElementById('mailTo').value,
-  };
-  localStorage.setItem('5s-config', JSON.stringify(config));
-  document.getElementById('headerDate').textContent = formatDate(config.date);
-}
-
-// ─── NAVIGATION ───────────────────────────────────────────────────────
 function goTo(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  const navId = 'nav-' + id.replace('screen-','');
-  const navBtn = document.getElementById(navId);
-  if (navBtn) navBtn.classList.add('active');
-  if (id === 'screen-liste') renderList();
-  if (id === 'screen-mail')  prefillMail();
+  var btns = document.querySelectorAll('#nav button');
+  for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+  var nb = document.getElementById('nb-' + id.replace('s-', ''));
+  if (nb) nb.classList.add('active');
+  if (id === 's-liste') renderList();
+  if (id === 's-mail')  prefillMail();
+  window.scrollTo(0, 0);
 }
 
-// ─── PRIORITY ─────────────────────────────────────────────────────────
-function selectPriority(p) {
-  selectedPriority = p;
-  ['critique','majeur','mineur'].forEach(x => {
-    document.getElementById('chip-'+x).className = 'priority-chip';
-  });
-  document.getElementById('chip-'+p).classList.add('selected-'+p);
+function saveConfig() {
+  cfg = {
+    agent:  document.getElementById('cfgAgent').value,
+    date:   document.getElementById('cfgDate').value,
+    zone:   document.getElementById('cfgZone').value,
+    mailTo: document.getElementById('cfgMailTo').value
+  };
+  localStorage.setItem('5s_cfg', JSON.stringify(cfg));
+  document.getElementById('hDate').textContent = fmtDate(cfg.date);
+  toast('Configuration enregistree !');
 }
 
-// ─── ZONE ─────────────────────────────────────────────────────────────
-function selectZone(el, zone) {
-  selectedZone = zone;
-  document.querySelectorAll('.zone-chip').forEach(c => c.classList.remove('active'));
+function selPrio(p) {
+  prio = p;
+  var ids = ['critique', 'majeur', 'mineur'];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById('pc-' + ids[i]);
+    el.className = 'pchip' + (ids[i] === p ? ' sel-' + p : '');
+  }
+}
+
+function selZone(el, z) {
+  zone = z;
+  var chips = document.querySelectorAll('.zchip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('active');
   el.classList.add('active');
 }
 
-// ─── PHOTOS ───────────────────────────────────────────────────────────
-function handlePhotos(input) {
-  const files = Array.from(input.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      currentPhotos.push(e.target.result);
-      renderPhotoGrid();
-    };
-    reader.readAsDataURL(file);
+function addPhotos(input) {
+  var files = Array.from(input.files);
+  files.forEach(function(f) {
+    var r = new FileReader();
+    r.onload = function(e) { photos.push(e.target.result); renderPhotoGrid(); };
+    r.readAsDataURL(f);
   });
   input.value = '';
 }
 
 function renderPhotoGrid() {
-  const grid = document.getElementById('photoGrid');
+  var grid = document.getElementById('photoGrid');
   grid.innerHTML = '';
-  currentPhotos.forEach((src, i) => {
-    const thumb = document.createElement('div');
-    thumb.className = 'photo-thumb';
-    thumb.innerHTML = `<img src="${src}" alt="photo">
-      <button class="del-photo" onclick="removePhoto(${i})">×</button>`;
-    grid.appendChild(thumb);
-  });
-  // Add button
-  const addBtn = document.createElement('div');
-  addBtn.className = 'photo-add-btn';
-  addBtn.onclick = () => document.getElementById('photoInput').click();
-  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>Photo`;
-  grid.appendChild(addBtn);
+  for (var i = 0; i < photos.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'photo-thumb';
+    d.innerHTML = '<img src="' + photos[i] + '"><button class="del-ph" onclick="delPhoto(' + i + ')">x</button>';
+    grid.appendChild(d);
+  }
+  var add = document.createElement('div');
+  add.className = 'add-photo-btn';
+  add.onclick = function() { document.getElementById('photoInput').click(); };
+  add.innerHTML = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7l-2-3H10L8 7"/><circle cx="12" cy="13" r="3"/></svg>Photo';
+  grid.appendChild(add);
 }
 
-function removePhoto(i) {
-  currentPhotos.splice(i, 1);
-  renderPhotoGrid();
-}
+function delPhoto(i) { photos.splice(i, 1); renderPhotoGrid(); }
 
-// ─── ADD PROBLEM ──────────────────────────────────────────────────────
-function addProblem() {
-  const desc   = document.getElementById('probDesc').value.trim();
-  const action = document.getElementById('probAction').value.trim();
-  const cat    = document.getElementById('categorie5S').value;
-  if (!desc) { showToast('⚠️ Décrivez le problème'); return; }
-
-  const prob = {
-    id:       Date.now(),
-    priority: selectedPriority,
-    zone:     selectedZone,
-    category: cat,
-    desc,
-    action,
-    photos:   [...currentPhotos],
+function saveProblem() {
+  var desc = document.getElementById('fDesc').value.trim();
+  if (!desc) { toast('Decrivez le probleme !'); return; }
+  var now = new Date();
+  var time = (now.getHours() < 10 ? '0' : '') + now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+  problems.unshift({
+    id: Date.now(),
+    prio: prio,
+    zone: zone,
+    cat: document.getElementById('fCat').value,
+    desc: desc,
+    action: document.getElementById('fAction').value.trim(),
+    photos: photos.slice(),
     resolved: false,
-    date:     new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
-  };
-  problems.unshift(prob);
+    time: time
+  });
   save();
-  resetForm();
-  refreshAll();
-  showToast('✅ Signalement enregistré');
-  goTo('screen-liste');
-}
-
-function resetForm() {
-  document.getElementById('probDesc').value   = '';
-  document.getElementById('probAction').value = '';
-  document.getElementById('categorie5S').selectedIndex = 0;
-  currentPhotos = [];
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fAction').value = '';
+  document.getElementById('fCat').selectedIndex = 0;
+  photos = [];
   renderPhotoGrid();
-  selectPriority('majeur');
+  selPrio('majeur');
+  var chips = document.querySelectorAll('.zchip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.toggle('active', i === 0);
+  zone = 'Zone commune';
+  refreshStats();
+  toast('Signalement enregistre !');
+  goTo('s-liste');
 }
 
-// ─── LIST ─────────────────────────────────────────────────────────────
 function renderList() {
-  const container = document.getElementById('problemList');
+  var c = document.getElementById('probList');
   if (!problems.length) {
-    container.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      <p>Aucun problème signalé</p></div>`;
+    c.innerHTML = '<div class="empty"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><p>Aucun probleme signale</p></div>';
     return;
   }
-  container.innerHTML = problems.map((p, i) => {
-    const icon = p.priority === 'critique' ? '🔴' : p.priority === 'majeur' ? '🟡' : '🔵';
-    return `
-    <div class="problem-item ${p.resolved ? 'resolved' : ''}">
-      <div class="prob-icon ${p.priority}"><span>${icon}</span></div>
-      <div class="prob-body">
-        <div class="prob-title">${p.desc}</div>
-        <div class="prob-meta">
-          <span class="prob-badge badge-${p.priority}">${p.priority}</span>
-          <span>${p.zone}</span>
-          <span>${p.date}</span>
-        </div>
-        ${p.action ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">→ ${p.action}</div>` : ''}
-        ${p.photos.length ? `<div class="prob-photos-count">📷 ${p.photos.length} photo(s)</div>` : ''}
-        <div class="prob-actions">
-          <button class="btn btn-ghost btn-sm" onclick="viewDetail(${i})">Détail</button>
-          <button class="btn btn-ghost btn-sm" onclick="toggleResolved(${i})">${p.resolved ? '↩ Rouvrir' : '✓ Résolu'}</button>
-          <button class="btn btn-sm" style="background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.2)" onclick="deleteProblem(${i})">Suppr.</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  var icons = { critique: '🔴', majeur: '🟡', mineur: '🔵' };
+  var html = '';
+  for (var i = 0; i < problems.length; i++) {
+    var p = problems[i];
+    html += '<div class="prob-item' + (p.resolved ? ' resolved' : '') + '">' +
+      '<div class="prob-icon ic-' + p.prio + '">' + icons[p.prio] + '</div>' +
+      '<div class="prob-body">' +
+        '<div class="prob-title">' + esc(p.desc) + '</div>' +
+        '<div class="prob-meta"><span class="badge b-' + p.prio + '">' + p.prio + '</span><span>' + esc(p.zone) + '</span><span>' + p.time + '</span></div>' +
+        (p.action ? '<div style="font-size:12px;color:#7a7f9a;margin-top:4px">→ ' + esc(p.action) + '</div>' : '') +
+        (p.photos.length ? '<div style="font-size:11px;color:#7a7f9a;margin-top:4px">📷 ' + p.photos.length + ' photo(s)</div>' : '') +
+        '<div class="prob-actions">' +
+          '<button class="btn-sm" style="background:#22263a;color:#eef0f8;border:1px solid #2e3347" onclick="detail(' + i + ')">Detail</button>' +
+          '<button class="btn-sm" style="background:#22263a;color:#eef0f8;border:1px solid #2e3347" onclick="toggleRes(' + i + ')">' + (p.resolved ? 'Rouvrir' : 'Resolu') + '</button>' +
+          '<button class="btn-sm" style="background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.2)" onclick="delProb(' + i + ')">Suppr.</button>' +
+        '</div>' +
+      '</div></div>';
+  }
+  c.innerHTML = html;
 }
 
-function toggleResolved(i) {
-  problems[i].resolved = !problems[i].resolved;
-  save(); renderList(); refreshAll();
-}
+function toggleRes(i) { problems[i].resolved = !problems[i].resolved; save(); renderList(); refreshStats(); }
 
-function deleteProblem(i) {
+function delProb(i) {
+  if (!confirm('Supprimer ?')) return;
   problems.splice(i, 1);
-  save(); renderList(); refreshAll();
-  showToast('🗑 Signalement supprimé');
+  save(); renderList(); refreshStats();
+  toast('Supprime');
 }
 
-function viewDetail(i) {
-  const p = problems[i];
-  document.getElementById('modalTitle').textContent = p.desc;
-  document.getElementById('modalBody').innerHTML = `
-    <div style="margin-bottom:12px">
-      <span class="prob-badge badge-${p.priority}" style="font-size:12px">${p.priority.toUpperCase()}</span>
-      <span style="font-size:12px;color:var(--muted);margin-left:8px">${p.zone} · ${p.date}</span>
-    </div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Catégorie : ${p.category}</div>
-    ${p.action ? `<div style="font-size:13px;margin-bottom:12px"><strong>Action requise :</strong> ${p.action}</div>` : ''}
-    ${p.photos.length ? `<div class="photo-grid">${p.photos.map(s => `<div class="photo-thumb"><img src="${s}"></div>`).join('')}</div>` : '<p style="font-size:13px;color:var(--muted)">Aucune photo</p>'}
-  `;
-  document.getElementById('detailModal').classList.add('open');
+function detail(i) {
+  var p = problems[i];
+  document.getElementById('mTitle').textContent = p.desc;
+  var ph = '';
+  if (p.photos.length) {
+    ph = '<div class="photo-grid">';
+    for (var j = 0; j < p.photos.length; j++) ph += '<div class="photo-thumb"><img src="' + p.photos[j] + '"></div>';
+    ph += '</div>';
+  } else {
+    ph = '<p style="font-size:13px;color:#7a7f9a">Aucune photo</p>';
+  }
+  document.getElementById('mBody').innerHTML =
+    '<p style="margin-bottom:10px"><span class="badge b-' + p.prio + '">' + p.prio + '</span>&nbsp;&nbsp;' + esc(p.zone) + ' - ' + p.time + '</p>' +
+    '<p style="font-size:13px;color:#7a7f9a;margin-bottom:8px">Categorie : ' + esc(p.cat) + '</p>' +
+    (p.action ? '<p style="font-size:13px;margin-bottom:12px">Action : ' + esc(p.action) + '</p>' : '') + ph;
+  document.getElementById('modal-overlay').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('detailModal').classList.remove('open');
-}
-document.getElementById('detailModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('detailModal')) closeModal();
-});
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
-// ─── STATS ────────────────────────────────────────────────────────────
-function refreshAll() {
-  const total    = problems.filter(p => !p.resolved).length;
-  const critique = problems.filter(p => p.priority === 'critique' && !p.resolved).length;
-  const majeur   = problems.filter(p => p.priority === 'majeur'   && !p.resolved).length;
-  const mineur   = problems.filter(p => p.priority === 'mineur'   && !p.resolved).length;
-  document.getElementById('totalCount').textContent    = total;
-  document.getElementById('stat-critique').textContent = critique;
-  document.getElementById('stat-majeur').textContent   = majeur;
-  document.getElementById('stat-mineur').textContent   = mineur;
+function refreshStats() {
+  var open = [];
+  for (var i = 0; i < problems.length; i++) if (!problems[i].resolved) open.push(problems[i]);
+  document.getElementById('badgeCount').textContent = open.length;
+  var c = 0, m = 0, mi = 0;
+  for (var j = 0; j < open.length; j++) {
+    if (open[j].prio === 'critique') c++;
+    else if (open[j].prio === 'majeur') m++;
+    else mi++;
+  }
+  document.getElementById('sc').textContent  = c;
+  document.getElementById('sm').textContent  = m;
+  document.getElementById('smi').textContent = mi;
 }
 
-// ─── EMAIL ────────────────────────────────────────────────────────────
 function prefillMail() {
-  const to = config.mailTo || '';
-  document.getElementById('mailToFinal').value = to;
-  document.getElementById('mailCc').value = 'Gildas Blanchard';
-  const zone  = config.zone  || 'Impasse 87';
-  const dDate = formatDate(config.date || new Date().toISOString().split('T')[0]);
-  document.getElementById('mailSubject').value = `Compte-rendu tournée 5S – ${zone} – ${dDate}`;
+  document.getElementById('mTo').value  = cfg.mailTo || '';
+  document.getElementById('mCc').value  = 'Gildas Blanchard';
+  var z = cfg.zone || 'Impasse 87';
+  var d = fmtDate(cfg.date || new Date().toISOString().slice(0, 10));
+  document.getElementById('mSub').value = 'Compte-rendu tournee 5S - ' + z + ' - ' + d;
 }
 
-function generateEmail() {
-  const agent   = config.agent || '[Votre nom]';
-  const zone    = config.zone  || 'Impasse 87';
-  const dDate   = formatDate(config.date || new Date().toISOString().split('T')[0]);
-  const to      = document.getElementById('mailToFinal').value || '[Destinataire]';
-
-  const open    = problems.filter(p => !p.resolved);
-  const closed  = problems.filter(p => p.resolved);
-
-  const prioSection = (label, key, emoji) => {
-    const items = open.filter(p => p.priority === key);
+function genMail() {
+  var agent = cfg.agent  || '[Agent]';
+  var z     = cfg.zone   || 'Impasse 87';
+  var d     = fmtDate(cfg.date || new Date().toISOString().slice(0, 10));
+  var to    = document.getElementById('mTo').value || '[Destinataire]';
+  var open = [], done = [];
+  for (var i = 0; i < problems.length; i++) {
+    if (problems[i].resolved) done.push(problems[i]); else open.push(problems[i]);
+  }
+  function section(label, key, emoji) {
+    var items = [];
+    for (var i = 0; i < open.length; i++) if (open[i].prio === key) items.push(open[i]);
     if (!items.length) return '';
-    return `\n${emoji} ${label.toUpperCase()} (${items.length})\n` +
-      items.map((p,i) => `  ${i+1}. [${p.zone}] ${p.desc}` +
-        (p.action ? `\n     → Action : ${p.action}` : '') +
-        (p.photos.length ? `\n     → Photos : ${p.photos.length} jointe(s)` : '')).join('\n');
-  };
-
-  const body = `Bonjour ${to},
-
-Dans le cadre du 5S de l'${zone}, qui m'a été confié par Gildas Blanchard, je vous adresse le compte-rendu de ma tournée terrain du ${dDate}.
-
-──────────────────────────────────
-RÉSUMÉ DE TOURNÉE
-──────────────────────────────────
-Agent : ${agent}
-Zone  : ${zone}
-Date  : ${dDate}
-Problèmes ouverts  : ${open.length}
-Problèmes résolus  : ${closed.length}
-
-──────────────────────────────────
-PROBLÈMES SIGNALÉS
-──────────────────────────────────
-${prioSection('Critique','critique','🔴') || ''}${prioSection('Majeur','majeur','🟡') || ''}${prioSection('Mineur','mineur','🔵') || ''}${open.length === 0 ? '  ✅ Aucun problème ouvert lors de cette tournée.' : ''}
-
-──────────────────────────────────
-ACTIONS ATTENDUES
-──────────────────────────────────
-Merci de bien vouloir prendre en compte les points signalés, en particulier les niveaux Critique et Majeur qui nécessitent une intervention prioritaire.
-
-Je reste disponible pour tout complément d'information ou pour accompagner la mise en place des actions correctives.
-
-Bien cordialement,
-${agent}
-Référent 5S – ${zone}`;
-
-  document.getElementById('emailText').textContent = body;
-  document.getElementById('emailOutput').style.display = 'block';
-  document.getElementById('emailOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var s = '\n' + emoji + ' ' + label.toUpperCase() + ' (' + items.length + ')\n';
+    for (var j = 0; j < items.length; j++) {
+      s += '  ' + (j+1) + '. [' + items[j].zone + '] ' + items[j].desc;
+      if (items[j].action) s += '\n     Action : ' + items[j].action;
+      if (items[j].photos.length) s += '\n     Photos : ' + items[j].photos.length + ' jointe(s)';
+      s += '\n';
+    }
+    return s;
+  }
+  var body = 'Bonjour ' + to + ',\n\n' +
+    'Dans le cadre du 5S de l\'' + z + ', qui m\'a ete confie par Gildas Blanchard,\n' +
+    'je vous adresse le compte-rendu de ma tournee terrain du ' + d + '.\n\n' +
+    '------------------------------------------\n' +
+    'RESUME\n' +
+    '------------------------------------------\n' +
+    'Agent  : ' + agent + '\n' +
+    'Zone   : ' + z + '\n' +
+    'Date   : ' + d + '\n' +
+    'Ouverts : ' + open.length + '\n' +
+    'Resolus : ' + done.length + '\n\n' +
+    '------------------------------------------\n' +
+    'PROBLEMES SIGNALES\n' +
+    '------------------------------------------' +
+    (section('Critique', 'critique', '🔴') || '') +
+    (section('Majeur',   'majeur',   '🟡') || '') +
+    (section('Mineur',   'mineur',   '🔵') || '') +
+    (open.length === 0 ? '\n  Aucun probleme ouvert lors de cette tournee.\n' : '') +
+    '\n------------------------------------------\n' +
+    'ACTIONS ATTENDUES\n' +
+    '------------------------------------------\n' +
+    'Merci de prendre en compte les points signales,\n' +
+    'en particulier les niveaux Critique et Majeur\n' +
+    'qui necessitent une intervention prioritaire.\n\n' +
+    'Je reste disponible pour tout complement d\'information.\n\n' +
+    'Bien cordialement,\n' + agent + '\nReferent 5S - ' + z;
+  document.getElementById('mailText').textContent = body;
+  document.getElementById('mailOutput').style.display = 'block';
+  document.getElementById('mailOutput').scrollIntoView({ behavior: 'smooth' });
 }
 
-function copyEmail() {
-  const text = document.getElementById('emailText').textContent;
-  navigator.clipboard.writeText(text).then(() => showToast('📋 Texte copié !')).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-    showToast('📋 Texte copié !');
-  });
+function copyMail() {
+  var txt = document.getElementById('mailText').textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function() { toast('Copie !'); }).catch(function() { fallbackCopy(txt); });
+  } else {
+    fallbackCopy(txt);
+  }
 }
 
-function openMailApp() {
-  const subject = encodeURIComponent(document.getElementById('mailSubject').value);
-  const body    = encodeURIComponent(document.getElementById('emailText').textContent);
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+function fallbackCopy(txt) {
+  var ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); toast('Copie !'); } catch(e) { toast('Copiez manuellement'); }
+  document.body.removeChild(ta);
 }
 
-// ─── UTILS ────────────────────────────────────────────────────────────
-function formatDate(d) {
+function openMail() {
+  var sub  = encodeURIComponent(document.getElementById('mSub').value);
+  var body = encodeURIComponent(document.getElementById('mailText').textContent);
+  window.location.href = 'mailto:?subject=' + sub + '&body=' + body;
+}
+
+function fmtDate(d) {
   if (!d) return '';
-  const [y,m,day] = d.split('-');
-  return `${day}/${m}/${y}`;
+  var p = d.split('-');
+  if (p.length !== 3) return d;
+  return p[2] + '/' + p[1] + '/' + p[0];
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
+function toast(msg) {
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
-function save() {
-  localStorage.setItem('5s-problems', JSON.stringify(problems));
+function save() { localStorage.setItem('5s_probs', JSON.stringify(problems)); }
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
 </body>
